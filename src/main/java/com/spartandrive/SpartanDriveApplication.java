@@ -1,15 +1,15 @@
 package com.spartandrive;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 
+import com.google.android.gcm.server.Sender;
 import org.elasticsearch.client.transport.TransportClient;
 import org.elasticsearch.common.transport.InetSocketTransportAddress;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
-import com.google.android.gcm.server.*;
+
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 @SpringBootApplication
 public class SpartanDriveApplication {
