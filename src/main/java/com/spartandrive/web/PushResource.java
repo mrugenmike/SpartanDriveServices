@@ -20,7 +20,7 @@ public class PushResource {
     @RequestMapping(value = "/push/{uid}",method = RequestMethod.PUT)
     public ResponseEntity<String> fetchToken(@PathVariable String uid,@RequestBody @Valid PushDetail detail) {
         final String docId = pushService.saveOrUpdateToken(uid, detail);
-        return new ResponseEntity<String>(String.format("{\"docId\":\"%s\"}",uid),HttpStatus.OK);
+        return new ResponseEntity<>(String.format("{\"docId\":\"%s\"}", docId), HttpStatus.OK);
     }
 
 }
