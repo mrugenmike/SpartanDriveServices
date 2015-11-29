@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class PushException extends RuntimeException {
     private final String message;
 
-    public PushException(String message){
+    public PushException(String message) {
         this.message = message;
     }
 }

@@ -30,13 +30,13 @@ public class SpartanDriveApplication {
     int esPort;
 
     @Bean
-    public Sender gcmClient(){
+    public Sender gcmClient() {
         return new Sender(gcmApiKey);
     }
 
     @Bean
     public TransportClient elasticClient() throws UnknownHostException {
-        return TransportClient.builder().build().addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(esHostname),esPort));
+        return TransportClient.builder().build().addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(esHostname), esPort));
     }
 
 }

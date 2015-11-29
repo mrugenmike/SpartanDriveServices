@@ -1,0 +1,41 @@
+package com.spartandrive.web;
+
+import com.spartandrive.services.FileService;
+import com.spartandrive.services.UnshareException;
+import com.spartandrive.web.request.SharedFileDetail;
+import com.spartandrive.web.request.UnshareFileRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+import java.util.List;
+
+/**
+ * Created by mrugen on 11/28/15.
+ */
+@RestController
+public class FilesResource {
+
+    @Autowired
+    FileService fileService;
+
+    @RequestMapping(value = "/files/shared", method = RequestMethod.POST)
+    public ResponseEntity<String> shareFile(@RequestBody @Valid SharedFileDetail sharedFileDetail) {
+        final String documentId = fileService.shareFile(sharedFileDetail);
+        return new ResponseEntity<String>(String.format("{\"docId\":\"%s\"}", documentId), HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/files/shared", method = RequestMethod.GET)
+    public ResponseEntity<List<SharedFileDetail>> findAllSharedFiles(@RequestParam("emailId") String email) {
+        final List<SharedFileDetail> sharedFiles = fileService.fetchSharedFiles(email);
+        return new ResponseEntity<>(sharedFiles, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/files/shared", method = RequestMethod.DELETE)
+    public ResponseEntity<String> unshareFile(@Valid @RequestBody UnshareFileRequest unshareFileRequest) throws UnshareException {
+        fileService.unshareFile(unshareFileRequest.getSharedWithEmailId(), unshareFileRequest.getFilePath(), unshareFileRequest.getOwnerEmailId());
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+}

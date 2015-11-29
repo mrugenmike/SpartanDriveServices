@@ -1,4 +1,4 @@
-package com.spartandrive.web;
+package com.spartandrive.web.request;
 
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -10,6 +10,13 @@ public class PushDetail {
     private String androidToken;
     @NotEmpty
     private String emailId;
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    @NotEmpty
+    private String firstName;
 
     public String getAndroidToken() {
         return androidToken;

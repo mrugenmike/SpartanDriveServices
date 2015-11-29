@@ -1,7 +1,11 @@
 package com.spartandrive.data;
 
 import org.elasticsearch.action.index.IndexResponse;
+import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.client.transport.TransportClient;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -24,9 +28,9 @@ public class PushRepository {
     private static String PROFILE = "profile";
 
     /***
-     *@return DocumentId from the index.
+     * @return DocumentId from the index.
      */
-    public String saveToken(String uid, String pushToken, String email) throws IOException {
+    public String saveToken(String uid, String pushToken, String email, String firstName) throws IOException {
         final IndexResponse indexResponse = client.prepareIndex(USER, PROFILE, uid)
                 .setSource(
                         jsonBuilder()
@@ -34,8 +38,24 @@ public class PushRepository {
                                 .field(USER_ID.toString(), uid)
                                 .field(USER_ANDROID_TOKEN.toString(), pushToken)
                                 .field(USER_EMAIL.toString(), email)
+                                .field(FIRST_NAME.toString(), firstName)
                                 .endObject()
                 ).get();
         return indexResponse.getId();
+    }
+
+    /**
+     * @return String - a Push Notification Token from GCM.
+     **/
+    public String findPushToken(String emailId) {
+        final SearchResponse searchResponse = client.prepareSearch(USER)
+                .setQuery(QueryBuilders.matchQuery(USER_EMAIL.toString(), emailId))
+                .get();
+        final SearchHits hits = searchResponse.getHits();
+        if (hits != null && hits.getTotalHits() > 0) {
+            final SearchHit hit = hits.hits()[0];
+            return hit.getSource().get(USER_ANDROID_TOKEN.toString()).toString();
+        }
+        return null;
     }
 }
