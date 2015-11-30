@@ -1,6 +1,7 @@
 package com.spartandrive.data;
 
 import com.spartandrive.web.request.SharedFileDetail;
+import org.apache.lucene.util.QueryBuilder;
 import org.elasticsearch.action.delete.DeleteResponse;
 import org.elasticsearch.action.index.IndexResponse;
 import org.elasticsearch.action.search.SearchResponse;
@@ -63,9 +64,8 @@ public class FileRepository {
     }
 
     private SearchResponse searchByEmailId(String email) {
-        System.out.println("searching for files shared with email:" + email);
-        return client.prepareSearch(FILE).setTypes(SHARED)
-                .setQuery(QueryBuilders.matchQuery(SHARED_WITH_EMAIL.toString(), email))
+        return client.prepareSearch(FILE)
+                .setQuery(QueryBuilders.matchQuery(SHARED_WITH_EMAIL.toString(), email)).setPostFilter(QueryBuilders.termQuery(SHARED_WITH_EMAIL.toString(),email))
                 .execute().actionGet();
     }
 

@@ -30,7 +30,10 @@ public class FilesResource {
     @RequestMapping(value = "/files/shared", method = RequestMethod.GET)
     public ResponseEntity<List<SharedFileDetail>> findAllSharedFiles(@RequestParam("emailId") String email) {
         final List<SharedFileDetail> sharedFiles = fileService.fetchSharedFiles(email);
-        return new ResponseEntity<>(sharedFiles, HttpStatus.OK);
+        if (sharedFiles!=null)
+            return new ResponseEntity<>(sharedFiles, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @RequestMapping(value = "/files/shared", method = RequestMethod.DELETE)
