@@ -59,7 +59,7 @@ public class PushRepository {
             final String firstName = hit.getSource().get(FIRST_NAME.toString()).toString();
             final String userId = hit.getSource().get(USER_ID.toString()).toString();
 
-            return new PushProfile(token,email,firstName,userId); ;
+            return new PushProfile(token,email,firstName,userId);
         }
         return null;
     }
