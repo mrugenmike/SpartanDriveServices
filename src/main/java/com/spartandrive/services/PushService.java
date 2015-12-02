@@ -38,8 +38,8 @@ public class PushService {
         final PushProfile pushToken = repository.findPushToken(sharedWithEmail);
         if (pushToken != null) {
             final Message message = new Message.Builder()
-                    .addData(PushMessageFields.TEXT, "File Shared")
-                    .addData(PushMessageFields.TITLE, String.format("%s shared file %s",ownerEmail,filename))
+                    .addData(PushMessageFields.TITLE, "File Shared")
+                    .addData(PushMessageFields.TEXT, String.format("%s shared file %s",ownerEmail,filename))
                     .build();
             sender.send(message, pushToken.getToken(), 3);
         }
@@ -49,8 +49,8 @@ public class PushService {
         final PushProfile pushToken = repository.findPushToken(emailId);
         if (pushToken != null) {
             final Message message = new Message.Builder()
-                    .addData(PushMessageFields.TEXT, "File Unshared")
-                    .addData(PushMessageFields.TITLE,String.format("%s unshared file %s",ownerEmail,filename))
+                    .addData(PushMessageFields.TITLE, "File Unshared")
+                    .addData(PushMessageFields.TEXT,String.format("%s unshared file %s",ownerEmail,filename))
                     .build();
             sender.send(message, pushToken.getToken(), 3);
         } else {
