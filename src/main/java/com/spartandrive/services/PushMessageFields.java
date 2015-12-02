@@ -5,5 +5,5 @@ package com.spartandrive.services;
  */
 public class PushMessageFields {
     public static String TEXT = "text";
-    public static String TITLE = "text";
+    public static String TITLE = "title";
 }

@@ -11,8 +11,10 @@ import org.springframework.stereotype.Repository;
 
 import java.io.IOException;
 
+import static com.spartandrive.data.SharedFile.SHARED_WITH_EMAIL;
 import static com.spartandrive.data.UserProfile.*;
 import static org.elasticsearch.common.xcontent.XContentFactory.jsonBuilder;
+import static org.elasticsearch.index.query.QueryBuilders.matchQuery;
 
 /**
  * Created by mrugen on 11/21/15.
@@ -49,14 +51,18 @@ public class PushRepository {
      **/
     public PushProfile findPushToken(String emailId) {
         final SearchResponse searchResponse = client.prepareSearch(USER)
-                .setQuery(QueryBuilders.matchQuery(USER_EMAIL.toString(), emailId))
+                .setQuery(QueryBuilders.boolQuery().filter(matchQuery(USER_EMAIL.toString(), emailId.trim())))
                 .get();
         final SearchHits hits = searchResponse.getHits();
         if (hits != null && hits.getTotalHits() > 0) {
             final SearchHit hit = hits.hits()[0];
+            System.out.println(hit.getSource());
             final String token = hit.getSource().get(USER_ANDROID_TOKEN.toString()).toString();
+            System.out.println("token="+token);
             final String email = hit.getSource().get(USER_EMAIL.toString()).toString();
+            System.out.println("email="+email);
             final String firstName = hit.getSource().get(FIRST_NAME.toString()).toString();
+            System.out.println("name="+firstName);
             final String userId = hit.getSource().get(USER_ID.toString()).toString();
 
             return new PushProfile(token,email,firstName,userId);

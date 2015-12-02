@@ -29,7 +29,7 @@ public class FileService {
             final String sharedFileDocId = fileRepository.saveFileDetails(sharedFileDetail);
             try {
                 if (sharedFileDocId != null) {
-                    pushService.sendFileSharedPush(sharedFileDetail.getPath(), sharedFileDetail.getOwnerEmail(), sharedFileDetail.getSharedWithEmail());
+                    pushService.sendFileSharedPush(sharedFileDetail.getFileName(), sharedFileDetail.getOwnerEmail(), sharedFileDetail.getSharedWithEmail());
                 }
             } catch (IOException e) {
                 e.printStackTrace();
