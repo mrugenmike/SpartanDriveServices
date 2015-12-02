@@ -47,14 +47,19 @@ public class PushRepository {
     /**
      * @return String - a Push Notification Token from GCM.
      **/
-    public String findPushToken(String emailId) {
+    public PushProfile findPushToken(String emailId) {
         final SearchResponse searchResponse = client.prepareSearch(USER)
                 .setQuery(QueryBuilders.matchQuery(USER_EMAIL.toString(), emailId))
                 .get();
         final SearchHits hits = searchResponse.getHits();
         if (hits != null && hits.getTotalHits() > 0) {
             final SearchHit hit = hits.hits()[0];
-            return hit.getSource().get(USER_ANDROID_TOKEN.toString()).toString();
+            final String token = hit.getSource().get(USER_ANDROID_TOKEN.toString()).toString();
+            final String email = hit.getSource().get(USER_EMAIL.toString()).toString();
+            final String firstName = hit.getSource().get(FIRST_NAME.toString()).toString();
+            final String userId = hit.getSource().get(USER_ID.toString()).toString();
+
+            return new PushProfile(token,email,firstName,userId); ;
         }
         return null;
     }

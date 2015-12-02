@@ -23,8 +23,18 @@ public class FilesResource {
 
     @RequestMapping(value = "/files/shared", method = RequestMethod.POST)
     public ResponseEntity<String> shareFile(@RequestBody @Valid SharedFileDetail sharedFileDetail) {
-        final String documentId = fileService.shareFile(sharedFileDetail);
-        return new ResponseEntity<String>(String.format("{\"docId\":\"%s\"}", documentId), HttpStatus.CREATED);
+
+        try {
+            final String documentId = fileService.shareFile(sharedFileDetail);
+            if(documentId!=null){
+                return new ResponseEntity<String>(String.format("{\"docId\":\"%s\"}", documentId), HttpStatus.CREATED);
+            } else{
+                return new ResponseEntity<String>(HttpStatus.NO_CONTENT);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseEntity<String>(String.format("{\"error\":\"%s\"}", e.getMessage()),HttpStatus.SERVICE_UNAVAILABLE);
+        }
     }
 
     @RequestMapping(value = "/files/shared", method = RequestMethod.GET)

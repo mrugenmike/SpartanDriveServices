@@ -24,16 +24,22 @@ public class FileService {
      * @return sharedFileIndexDocumentID
      * @Throws FileException if underlying data store fails to store the fileDetails.
      */
-    public String shareFile(SharedFileDetail sharedFileDetail) {
-        try {
+    public String shareFile(SharedFileDetail sharedFileDetail) throws Exception{
+        try{
             final String sharedFileDocId = fileRepository.saveFileDetails(sharedFileDetail);
-            if (sharedFileDetail != null) {
-                pushService.sendFileSharedPush(sharedFileDetail.getPath(), sharedFileDetail.getOwnerEmail(), sharedFileDetail.getSharedWithEmail());
+            try {
+                if (sharedFileDocId != null) {
+                    pushService.sendFileSharedPush(sharedFileDetail.getPath(), sharedFileDetail.getOwnerEmail(), sharedFileDetail.getSharedWithEmail());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
             return sharedFileDocId;
-        } catch (IOException e) {
-            throw new FileException(e.getMessage());
+        }catch(Exception e){
+            e.printStackTrace();
         }
+
+        return null;
     }
 
     public List<SharedFileDetail> fetchSharedFiles(String email) {
