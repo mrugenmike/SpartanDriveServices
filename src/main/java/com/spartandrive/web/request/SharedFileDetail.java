@@ -38,6 +38,18 @@ public class SharedFileDetail {
 
     String folderName;
 
+    String size;
+
+    String modified;
+
+    public String getModified() {
+        return modified;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
     public SharedFileDetail() {
     }
 
@@ -53,6 +65,8 @@ public class SharedFileDetail {
         this.sharedWithEmail = source.get(SHARED_WITH_EMAIL.toString()).toString();
         this.sharedFileUrl = source.get(SHARED_FILE_URL.toString()).toString();
         this.directoryContents = (Map<String, Object>) source.get(CONTENTS.toString());
+        this.modified = source.get(MODIFIED.toString()).toString();
+        this.size = source.get(SIZE.toString()).toString();
     }
 
     public String getSharedFileUrl() {

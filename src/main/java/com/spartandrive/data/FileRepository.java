@@ -50,6 +50,8 @@ public class FileRepository {
                                 .field(SHARED_WITH_EMAIL.toString(), sharedFileDetail.getSharedWithEmail())
                                 .field(SHARED_FILE_URL.toString(), sharedFileDetail.getSharedFileUrl())
                                 .field(CONTENTS.toString(), sharedFileDetail.getDirectoryContents())
+                                .field(MODIFIED.toString(), sharedFileDetail.getModified())
+                                .field(SIZE.toString(), sharedFileDetail.getSize())
                                 .endObject()
                 ).get();
         return sharedFileIndexResponse.getId();
