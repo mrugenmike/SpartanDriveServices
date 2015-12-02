@@ -39,7 +39,7 @@ public class PushService {
         if (pushToken != null) {
             final Message message = new Message.Builder()
                     .addData(PushMessageFields.TITLE, "File Shared")
-                    .addData(PushMessageFields.TEXT, String.format("%s shared file %s",ownerEmail,filename))
+                    .addData(PushMessageFields.TEXT, String.format("%s shared %s",ownerEmail,filename))
                     .build();
             sender.send(message, pushToken.getToken(), 3);
         }
@@ -50,7 +50,7 @@ public class PushService {
         if (pushToken != null) {
             final Message message = new Message.Builder()
                     .addData(PushMessageFields.TITLE, "File Unshared")
-                    .addData(PushMessageFields.TEXT,String.format("%s unshared file %s",ownerEmail,filename))
+                    .addData(PushMessageFields.TEXT,String.format("%s unshared %s",ownerEmail,filename))
                     .build();
             sender.send(message, pushToken.getToken(), 3);
         } else {
