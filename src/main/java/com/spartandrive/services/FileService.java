@@ -78,7 +78,7 @@ public class FileService {
                 final SendGrid.Email email = new SendGrid.Email();
                 email.setTo(new String[]{emailId});
                 email.setSubject("File Unshared -"+filePath);
-                email.setTemplateId(shareEmailTemplate);
+                email.setTemplateId(unsharedTemplate);
                 email.setFrom(ownerEmailId);
                 final String html = String.format("%s Unshared file at <b> %s </b> with you.<b>",ownerEmailId, filePath);
                 email.setHtml(html);
