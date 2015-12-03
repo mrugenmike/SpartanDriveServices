@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import com.sendgrid.SendGrid;
 
 @SpringBootApplication
 public class SpartanDriveApplication {
@@ -29,6 +30,9 @@ public class SpartanDriveApplication {
     @Value("${es.port}")
     int esPort;
 
+    @Value("${sendgrid.apikey}")
+    String sendGridApikey;
+
     @Bean
     public Sender gcmClient() {
         return new Sender(gcmApiKey);
@@ -37,6 +41,10 @@ public class SpartanDriveApplication {
     @Bean
     public TransportClient elasticClient() throws UnknownHostException {
         return TransportClient.builder().build().addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName(esHostname), esPort));
+    }
+
+    @Bean SendGrid sendGridClient(){
+        return new SendGrid(sendGridApikey);
     }
 
 }

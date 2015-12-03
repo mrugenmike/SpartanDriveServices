@@ -41,6 +41,7 @@ dependencies {
     compile("org.springframework.boot:spring-boot-starter-actuator")
     // end::actuator[]
     testCompile("junit:junit")
+    compile 'com.sendgrid:sendgrid-java:2.2.1'
 }
 
 task wrapper(type: Wrapper) {

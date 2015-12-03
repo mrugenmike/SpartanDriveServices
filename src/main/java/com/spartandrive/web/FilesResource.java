@@ -47,8 +47,8 @@ public class FilesResource {
     }
 
     @RequestMapping(value = "/files/shared", method = RequestMethod.DELETE)
-    public ResponseEntity<String> unshareFile(@Valid @RequestBody UnshareFileRequest unshareFileRequest) throws UnshareException {
-        fileService.unshareFile(unshareFileRequest.getSharedWithEmailId(), unshareFileRequest.getFilePath(), unshareFileRequest.getOwnerEmailId());
+    public ResponseEntity<String> unshareFile(@RequestParam("filePath") String filePath,@RequestParam("sharedWithEmailID")String sharedWithEmailId,@RequestParam("ownerEmailID")String ownerEmailId) throws UnshareException {
+        fileService.unshareFile(sharedWithEmailId,filePath,ownerEmailId);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
