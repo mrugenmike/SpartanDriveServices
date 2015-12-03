@@ -38,8 +38,8 @@ public class FilesResource {
     }
 
     @RequestMapping(value = "/files/shared", method = RequestMethod.GET)
-    public ResponseEntity<List<SharedFileDetail>> findAllSharedFiles(@RequestParam("emailId") String email) {
-        final List<SharedFileDetail> sharedFiles = fileService.fetchSharedFiles(email);
+    public ResponseEntity<List<SharedFileDetail>> findAllSharedFilesFor(@RequestParam("emailId") String email) {
+        final List<SharedFileDetail> sharedFiles = fileService.fetchSharedFilesFor(email);
         if (sharedFiles!=null)
             return new ResponseEntity<>(sharedFiles, HttpStatus.OK);
         else
@@ -50,5 +50,14 @@ public class FilesResource {
     public ResponseEntity<String> unshareFile(@Valid @RequestBody UnshareFileRequest unshareFileRequest) throws UnshareException {
         fileService.unshareFile(unshareFileRequest.getSharedWithEmailId(), unshareFileRequest.getFilePath(), unshareFileRequest.getOwnerEmailId());
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/files/shared/{uid}", method = RequestMethod.GET)
+    public ResponseEntity<List<SharedFileDetail>> findAllFilesSharedBy(@PathVariable("uid") String uid,@RequestParam("filePath") String filePath) {
+        final List<SharedFileDetail> sharedFiles = fileService.fetchSharedFilesBy(uid,filePath);
+        if (sharedFiles!=null)
+            return new ResponseEntity<>(sharedFiles, HttpStatus.OK);
+        else
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

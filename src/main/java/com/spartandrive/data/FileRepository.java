@@ -57,8 +57,8 @@ public class FileRepository {
         return sharedFileIndexResponse.getId();
     }
 
-    public List<SharedFileDetail> findBySharedEmail(String email) {
-        final SearchResponse searchResponse = searchByEmailId(email);
+    public List<SharedFileDetail> findBySharedWith(String email) {
+        final SearchResponse searchResponse = searchBySharedWithEmailId(email);
         final SearchHits hits = searchResponse.getHits();
         if (hits != null && hits.totalHits() > 0) {
             return Arrays.asList(hits.getHits()).stream().map(hit -> new SharedFileDetail(hit.sourceAsMap())).collect(Collectors.toList());
@@ -66,7 +66,7 @@ public class FileRepository {
         return null;
     }
 
-    private SearchResponse searchByEmailId(String email) {
+    private SearchResponse searchBySharedWithEmailId(String email) {
         return client.prepareSearch(FILE)
                 .setQuery(QueryBuilders.boolQuery().filter(matchQuery(SHARED_WITH_EMAIL.toString(), email)))
                 .execute().actionGet();
@@ -76,7 +76,7 @@ public class FileRepository {
      * @Returns Boolean If the document was found and deleted.
      **/
     public boolean deleteSharedFileRecord(String emailId, String filePath) throws FailedToDeleteFileException {
-        final SearchResponse searchResponse = searchByEmailId(emailId);
+        final SearchResponse searchResponse = searchBySharedWithEmailId(emailId);
         final SearchHits hits = searchResponse.getHits();
         if (hits != null && hits.getTotalHits() > 0) {
             for (SearchHit hit : hits) {
@@ -96,5 +96,23 @@ public class FileRepository {
             }
         }
         return false;
+    }
+
+    public List<SharedFileDetail> findSharedByUser(String ownerUID, String filePath) {
+        final SearchResponse searchResponse = searchBySharedByUser(ownerUID);
+        final SearchHits hits = searchResponse.getHits();
+        if (hits != null && hits.totalHits() > 0) {
+            return Arrays.asList(hits.getHits()).stream()
+                    .filter(hit -> hit.getSource().get(PATH.toString()).toString().equals(filePath))
+                    .map(hit -> new SharedFileDetail(hit.sourceAsMap()))
+                    .collect(Collectors.toList());
+        }
+        return null;
+    }
+
+    private SearchResponse searchBySharedByUser(String uid) {
+        return client.prepareSearch(FILE)
+                .setQuery(QueryBuilders.boolQuery().filter(matchQuery(OWNER_ID.toString(), uid)))
+                .execute().actionGet();
     }
 }

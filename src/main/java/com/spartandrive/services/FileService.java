@@ -42,8 +42,8 @@ public class FileService {
         return null;
     }
 
-    public List<SharedFileDetail> fetchSharedFiles(String email) {
-        return fileRepository.findBySharedEmail(email);
+    public List<SharedFileDetail> fetchSharedFilesFor(String email) {
+        return fileRepository.findBySharedWith(email);
     }
 
     public void unshareFile(String emailId, String filePath, String ownerEmailId) throws UnshareException {
@@ -59,5 +59,9 @@ public class FileService {
         } catch (PushTokenNotFoundException e) {
             e.printStackTrace();
         }
+    }
+
+    public List<SharedFileDetail> fetchSharedFilesBy(String uid, String filePath) {
+        return fileRepository.findSharedByUser(uid,filePath);
     }
 }
